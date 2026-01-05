@@ -2,7 +2,7 @@
 
 **Descrição**
 
-Projeto de exemplo / case técnico desenvolvido para o BTG. É uma API REST construída com FastAPI que gerencia uma pequena biblioteca: livros, usuários e empréstimos, com autenticação via JWT, controle de permissões, testes e configuração para linting e formatação.
+Case técnico desenvolvido para o BTG. É uma API REST construída com FastAPI que gerencia uma pequena biblioteca: livros, usuários e empréstimos, com autenticação via JWT, controle de permissões, testes e configuração para linting e formatação.
 
 ---
 
@@ -76,6 +76,24 @@ O template `.env.template` serve como referência para todas as variáveis neces
 ## 📑 Documentação das rotas
 
 Toda a documentação das rotas está disponível automaticamente via Swagger em [`/docs`](http://localhost:8000/docs) quando o servidor está rodando.
+
+## 🗂️ Estrutura do Projeto
+
+O projeto está organizado nos seguintes módulos:
+
+- `app/core/` — Configurações, exceções, logging, segurança, rate limiting
+- `app/db/` — Banco de dados, fixtures e inicialização
+- `app/models/` — Modelos ORM: Book, User, Lending
+- `app/repositories/` — Repositórios para acesso aos dados
+- `app/services/` — Regras de negócio e serviços
+- `app/api/v1/` — Rotas da API (auth, books, lendings, users)
+- `app/main.py` — Ponto de entrada da aplicação FastAPI
+- `tests/` — Testes automatizados e factories
+
+Outros arquivos importantes:
+
+- `.env.template` — Exemplo de variáveis de ambiente
+- `pyproject.toml` — Configuração de dependências, tasks e linters
 
 ## ✅ Comandos úteis (definidos em `pyproject.toml` via taskipy)
 
