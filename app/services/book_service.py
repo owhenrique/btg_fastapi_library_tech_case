@@ -5,19 +5,19 @@ from typing import Sequence
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.v1.schemas.book import BookAvailability, BookCreate
-from app.models.book import Book
-from app.repositories.book_repository import BookRepository
-from app.services.exceptions import (
+from app.core.exceptions import (
     BookAlreadyExists,
     BookNotFound,
     InvalidBookData,
 )
+from app.models.book import Book
+from app.repositories.book_repository import BookRepository
 
 
 class BookService:
     def __init__(
-            self, repo: BookRepository, session: AsyncSession | None = None
-        ) -> None:
+        self, repo: BookRepository, session: AsyncSession | None = None
+    ) -> None:
         self.repo = repo
         self.session = session
 

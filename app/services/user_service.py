@@ -5,15 +5,15 @@ from typing import Optional, Sequence
 from email_validator import EmailNotValidError, validate_email
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.lending import Lending
-from app.models.user import Role, User
-from app.repositories.user_repository import UserRepository
-from app.services.exceptions import (
+from app.core.exceptions import (
     EmailAlreadyExists,
     IncorrectPassword,
     InvalidEmail,
     UserNotFound,
 )
+from app.models.lending import Lending
+from app.models.user import Role, User
+from app.repositories.user_repository import UserRepository
 
 
 class UserService:

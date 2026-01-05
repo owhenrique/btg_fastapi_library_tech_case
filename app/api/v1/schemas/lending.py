@@ -15,3 +15,18 @@ class LendingRead(BaseModel):
 
     class ConfigDict:
         from_attributes = True
+
+
+class LendingCreate(BaseModel):
+    user_id: int
+    book_id: int
+
+
+class LendingReturn(BaseModel):
+    returned_at: datetime | None = None
+
+
+class LendingReturnResult(BaseModel):
+    lending_id: int
+    returned_at: datetime
+    fine: float
