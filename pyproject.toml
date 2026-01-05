@@ -12,7 +12,7 @@ dependencies = [
     "pydantic-settings (>=2.12.0,<3.0.0)",
     "sqlalchemy (>=2.0.45,<3.0.0)",
     "aiosqlite (>=0.22.1,<0.23.0)",
-    "python-jose[cryptography] (>=3.5.0,<4.0.0)"
+    "python-jose[cryptography] (>=3.5.0,<4.0.0)",
 ]
 
 [tool.ruff]
@@ -49,5 +49,6 @@ dev = [
     "taskipy (>=1.14.1,<2.0.0)",
     "ruff (>=0.14.10,<0.15.0)",
     "pytest (>=9.0.2,<10.0.0)",
-    "pytest-cov (>=7.0.0,<8.0.0)"
+    "pytest-cov (>=7.0.0,<8.0.0)",
+    "factory-boy (>=3.3.3,<4.0.0)"
 ]

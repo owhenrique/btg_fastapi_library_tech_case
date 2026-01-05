@@ -16,10 +16,10 @@ from jose import JWTError, jwt
 
 from app.core.config import settings
 
-# Password hashing parameters
 _ALGORITHM = 'pbkdf2_sha256'
 _ITERATIONS = 120_000
 _SALT_SIZE = 16  # bytes
+TOKEN_ALGORITHM = 'HS256'
 
 
 def hash_password(
@@ -61,9 +61,6 @@ def verify_password(stored: str, password: str) -> bool:
     return secrets.compare_digest(new_dk, dk)
 
 
-ALGORITHM = 'HS256'
-
-
 def create_access_token(
     data: Dict[str, Any],
     expires_delta: Optional[timedelta] = None,
@@ -74,7 +71,9 @@ def create_access_token(
         expires_delta = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     expire = datetime.now(timezone.utc) + expires_delta
     to_encode.update({'exp': expire})
-    token = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
+    token = jwt.encode(
+        to_encode, settings.SECRET_KEY, algorithm=TOKEN_ALGORITHM
+    )
     return token
 
 
@@ -87,7 +86,7 @@ def decode_access_token(token: str) -> Dict[str, Any]:
         payload = jwt.decode(
             token,
             settings.SECRET_KEY,
-            algorithms=[ALGORITHM],
+            algorithms=[TOKEN_ALGORITHM],
         )
         return payload
     except JWTError as exc:

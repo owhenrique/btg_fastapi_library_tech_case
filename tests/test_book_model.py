@@ -22,7 +22,7 @@ def test_create_book_instance():
     assert 'Pragmatic' in repr(b)
     assert 'Andrew' in repr(b)
     assert b.category == BookCategoryEnum.TECH
-    # By default there is 1 copy and it is available
+
     assert b.total_copies == DEFAULT_COPY
     assert b.available_copies == DEFAULT_COPY
 
@@ -33,13 +33,12 @@ def test_lending_and_return_flow():
     b.total_copies = TOTAL_COPIES
     b.available_copies = TOTAL_COPIES
 
-    b.lending()  # lending 1
+    b.lending()
     assert b.available_copies == TOTAL_COPIES - LENDING_ONE
 
-    b.lending(LENDING_TWO)  # lending remaining 2
+    b.lending(LENDING_TWO)
     assert b.available_copies == TOTAL_COPIES - LENDING_ONE - LENDING_TWO
 
-    # cannot lend when none available
     try:
         b.lending()
     except ValueError:
@@ -47,13 +46,11 @@ def test_lending_and_return_flow():
     else:
         raise AssertionError('lending should fail when no copies available')
 
-    # returning copies
     b.return_copy(LENDING_TWO)
     assert b.available_copies == (
         TOTAL_COPIES - LENDING_ONE - LENDING_TWO + LENDING_TWO
     )
 
-    # cannot return more than total
     try:
         b.return_copy(RETURN_EXCEED)
     except ValueError:

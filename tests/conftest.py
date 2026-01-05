@@ -1,4 +1,3 @@
-
 import pytest_asyncio as pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import (
@@ -36,7 +35,6 @@ async def async_session_factory(engine):
 
 @pytest.fixture
 async def prepare_db(engine):
-    # create tables
     await create_db_and_tables(engine_override=engine)
 
 

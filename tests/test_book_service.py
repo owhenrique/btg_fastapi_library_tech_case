@@ -1,13 +1,13 @@
 import pytest
 
 from app.api.v1.schemas.book import BookCreate
-from app.models.book import BookCategoryEnum
-from app.services.book_service import BookService
-from app.services.exceptions import (
+from app.core.exceptions import (
     BookAlreadyExists,
     BookNotFound,
     InvalidBookData,
 )
+from app.models.book import BookCategoryEnum
+from app.services.book_service import BookService
 
 TOTAL_COPIES = 2
 
@@ -18,7 +18,7 @@ async def test_create_book_success(book_service: BookService):
         name='Livro Teste',
         author='Autor',
         total_copies=TOTAL_COPIES,
-        category=BookCategoryEnum.FICTION
+        category=BookCategoryEnum.FICTION,
     )
     book = await book_service.create_book(data)
     assert book.id is not None
@@ -35,7 +35,7 @@ async def test_create_book_duplicate(book_service: BookService):
         name='Duplicado',
         author='Autor',
         total_copies=1,
-        category=BookCategoryEnum.TECH
+        category=BookCategoryEnum.TECH,
     )
     await book_service.create_book(data)
     with pytest.raises(BookAlreadyExists):
@@ -48,7 +48,7 @@ async def test_create_book_invalid_data(book_service: BookService):
         name='',
         author='Autor',
         total_copies=0,
-        category=BookCategoryEnum.OTHER
+        category=BookCategoryEnum.OTHER,
     )
     with pytest.raises(InvalidBookData):
         await book_service.create_book(data)
@@ -60,7 +60,7 @@ async def test_check_availability_success(book_service: BookService):
         name='Disponível',
         author='Autor',
         total_copies=TOTAL_COPIES,
-        category=BookCategoryEnum.FICTION
+        category=BookCategoryEnum.FICTION,
     )
     book = await book_service.create_book(data)
     availability = await book_service.check_availability(book.id)

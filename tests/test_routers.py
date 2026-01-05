@@ -3,8 +3,8 @@ from fastapi.testclient import TestClient
 
 import app.api.v1.routers.users as users_router
 from app import main
+from app.core.exceptions import IncorrectPassword, UserNotFound
 from app.core.security import create_access_token
-from app.services.exceptions import IncorrectPassword, UserNotFound
 
 
 def test_get_user_by_id_not_found(monkeypatch):

@@ -2,12 +2,12 @@ import asyncio
 
 import pytest
 
-from app.repositories.user_repository import UserRepository
-from app.services.exceptions import (
+from app.core.exceptions import (
     EmailAlreadyExists,
     IncorrectPassword,
     UserNotFound,
 )
+from app.repositories.user_repository import UserRepository
 from app.services.user_service import UserService
 
 

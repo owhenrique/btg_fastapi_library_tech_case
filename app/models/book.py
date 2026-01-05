@@ -44,7 +44,6 @@ class Book(Base, TimeStampMixin):
         )
 
     def __init__(self, *args, **kwargs):
-        # Ensure sensible Python-level defaults before persistence
         super().__init__(*args, **kwargs)
         if getattr(self, 'total_copies', None) is None:
             self.total_copies = 1

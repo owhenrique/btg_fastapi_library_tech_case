@@ -25,7 +25,6 @@ def test_mark_returned_increases_available():
     lending.book = book
     lending.quantity = 1
 
-    # returning should increment available
     lending.mark_returned()
     assert book.available_copies == 1
     assert not lending.is_active
