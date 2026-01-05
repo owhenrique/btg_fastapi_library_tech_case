@@ -13,5 +13,5 @@ class LendingRead(BaseModel):
     lending_date: datetime
     returned_at: Optional[datetime]
 
-    class Config:
+    class ConfigDict:
         from_attributes = True

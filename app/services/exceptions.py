@@ -45,3 +45,19 @@ class UserNotFound(BaseServiceException):
 class InvalidEmail(BaseServiceException):
     code = status.HTTP_422_UNPROCESSABLE_CONTENT
     detail = 'Invalid email address'
+
+
+# --- Book domain exceptions ---
+class BookNotFound(BaseServiceException):
+    code = status.HTTP_404_NOT_FOUND
+    detail = 'Book not found'
+
+
+class BookAlreadyExists(BaseServiceException):
+    code = status.HTTP_409_CONFLICT
+    detail = 'Book already exists'
+
+
+class InvalidBookData(BaseServiceException):
+    code = status.HTTP_422_UNPROCESSABLE_CONTENT
+    detail = 'Invalid book data'

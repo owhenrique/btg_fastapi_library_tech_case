@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from app.api.v1.routers.auth import router as auth
+from app.api.v1.routers.books import router as books
 from app.api.v1.routers.users import router as user
 from app.core.config import settings
 from app.db.database import create_db_and_tables
@@ -31,6 +32,7 @@ async def service_exception_handler(
 
 app.include_router(user)
 app.include_router(auth)
+app.include_router(books)
 
 
 @app.get('/health')

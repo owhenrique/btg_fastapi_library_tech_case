@@ -1,6 +1,5 @@
-import asyncio
 
-import pytest
+import pytest_asyncio as pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
@@ -15,32 +14,34 @@ from app.db.database import create_db_and_tables
 from app.models.book import Book, BookCategoryEnum
 from app.models.lending import Lending
 from app.models.user import Role
+from app.repositories.book_repository import BookRepository
 from app.repositories.user_repository import UserRepository
+from app.services.book_service import BookService
 from app.services.user_service import UserService
 
 
 @pytest.fixture
-def engine():
+async def engine():
     engine = create_async_engine('sqlite+aiosqlite:///:memory:', future=True)
     yield engine
-    asyncio.run(engine.dispose())
+    await engine.dispose()
 
 
 @pytest.fixture
-def async_session_factory(engine):
+async def async_session_factory(engine):
     return async_sessionmaker(
         bind=engine, expire_on_commit=False, class_=AsyncSession
     )
 
 
 @pytest.fixture
-def prepare_db(engine):
+async def prepare_db(engine):
     # create tables
-    asyncio.run(create_db_and_tables(engine_override=engine))
+    await create_db_and_tables(engine_override=engine)
 
 
 @pytest.fixture
-def user_factory(async_session_factory, prepare_db):
+async def user_factory(async_session_factory, prepare_db):
     async def _create(
         name='alice',
         email='alice@example.com',
@@ -57,7 +58,7 @@ def user_factory(async_session_factory, prepare_db):
 
 
 @pytest.fixture
-def book_factory(async_session_factory, prepare_db):
+async def book_factory(async_session_factory, prepare_db):
     async def _create(
         name='The Book',
         author='Author',
@@ -80,7 +81,7 @@ def book_factory(async_session_factory, prepare_db):
 
 
 @pytest.fixture
-def lending_factory(async_session_factory, user_factory, book_factory):
+async def lending_factory(async_session_factory, user_factory, book_factory):
     async def _create(user=None, book=None, qty=1):
         if user is None:
             user = await user_factory()
@@ -99,7 +100,7 @@ def lending_factory(async_session_factory, user_factory, book_factory):
 
 
 @pytest.fixture
-def client(async_session_factory, prepare_db):
+async def client(async_session_factory, prepare_db):
     orig_create = app_settings.CREATE_DEV_ADMIN
     app_settings.CREATE_DEV_ADMIN = False
 
@@ -119,3 +120,11 @@ def client(async_session_factory, prepare_db):
 
     app_main.app.dependency_overrides.pop(get_user_service, None)
     app_settings.CREATE_DEV_ADMIN = orig_create
+
+
+@pytest.fixture
+async def book_service(async_session_factory, prepare_db):
+    async with async_session_factory() as session:
+        repo = BookRepository(session)
+        svc = BookService(repo, session=session)
+        yield svc

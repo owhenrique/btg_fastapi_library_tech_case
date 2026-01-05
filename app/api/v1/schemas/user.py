@@ -22,5 +22,5 @@ class UserRead(BaseModel):
     role: Role
     created_at: Optional[datetime]
 
-    class Config:
+    class ConfigDict:
         from_attributes = True

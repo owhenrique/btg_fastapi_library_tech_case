@@ -4,7 +4,9 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_session
+from app.repositories.book_repository import BookRepository
 from app.repositories.user_repository import UserRepository
+from app.services.book_service import BookService
 from app.services.user_service import UserService
 
 
@@ -17,3 +19,14 @@ async def get_user_service(
 
 
 UserServiceDep = Depends(get_user_service)
+
+
+async def get_book_service(
+    session: AsyncSession = Depends(get_session),
+) -> BookService:
+    repo = BookRepository(session)
+    svc = BookService(repo, session=session)
+    return svc
+
+
+BookServiceDep = Depends(get_book_service)

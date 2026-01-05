@@ -36,7 +36,7 @@ pre_format = 'ruff check --fix'
 format = 'ruff format'
 dev = 'fastapi dev app/main.py'
 pre_test = 'task lint'
-test = 'pytest -s -x --cov=src/app -vv'
+test = 'pytest -s -x --cov=app -vv'
 post_test = 'coverage html'
 
 
