@@ -1,7 +1,7 @@
 from app.models.user import Role, User
 
 
-def test_default_role_is_user():
+def test_default_role_is_reader():
     u = User()
     u.name = 'joao'
     assert u.role in {None, Role.READER}

@@ -24,6 +24,9 @@ class User(Base, TimeStampMixin):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
+    email: Mapped[str] = mapped_column(
+        String(255), nullable=False, unique=True
+    )
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     role: Mapped[Role] = mapped_column(
         SAEnum(Role, name='user_role', native_enum=False),
@@ -32,16 +35,15 @@ class User(Base, TimeStampMixin):
     )
 
     def set_password(self, password: str) -> None:
-        """
-        Hash and set the user's password by delegating to the security module.
-        """
         self.password = hash_password(password)
 
     def check_password(self, password: str) -> bool:
-        """
-        Verify the provided password by delegating to the security module.
-        """
         return verify_password(self.password, password)
 
     def __repr__(self) -> str:  # pragma: no cover - simple repr
-        return f'<User id={self.id!r} name={self.name!r} role={self.role!r}>'
+        return (
+            f'<User id={self.id!r} '
+            f'email={self.email!r} '
+            f'name={self.name!r} '
+            f'role={self.role!r}>'
+        )
