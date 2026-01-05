@@ -131,4 +131,4 @@ async def test_return_lending_with_fine(
         result = await service.return_lending(
             lending.id, LendingReturn(returned_at=late_date)
         )
-        assert result.fine == FINE_TOTAL  # 6 dias de atraso x 2 reais
+        assert result.fine == FINE_TOTAL
