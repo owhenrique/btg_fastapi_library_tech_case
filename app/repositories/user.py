@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Optional, Sequence
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.lending import Lending
@@ -15,10 +15,15 @@ class UserRepository:
 
     async def list_users(
         self, limit: int = 100, offset: int = 0
-    ) -> Sequence[User]:
+    ) -> tuple[Sequence[User], int]:
         stmt = select(User).limit(limit).offset(offset)
         result = await self.session.execute(stmt)
-        return result.scalars().all()
+        items = result.scalars().all()
+
+        count_stmt = select(func.count()).select_from(User)
+        count_result = await self.session.execute(count_stmt)
+        total = count_result.scalar_one()
+        return items, total
 
     async def create_user(self, user: User) -> User:
         self.session.add(user)

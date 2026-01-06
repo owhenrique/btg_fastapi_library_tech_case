@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime, timedelta
 
 from fastapi import status
@@ -9,13 +10,10 @@ FINE_DAYS_LATE = 6
 FINE_TOTAL = FINE_PER_DAY * FINE_DAYS_LATE
 
 
-import asyncio
-
-
 def test_create_lending_endpoint(client, user_factory, book_factory):
-    user = asyncio.run(user_factory(role="admin"))
+    user = asyncio.run(user_factory(role='admin'))
     book = asyncio.run(book_factory(total_copies=2))
-    token = create_access_token({"sub": str(user.id)})
+    token = create_access_token({'sub': str(user.id)})
     data = {'user_id': user.id, 'book_id': book.id}
     response = client.post(
         '/api/v1/lendings/',
@@ -29,9 +27,9 @@ def test_create_lending_endpoint(client, user_factory, book_factory):
 
 
 def test_lending_limit_endpoint(client, user_factory, book_factory):
-    user = asyncio.run(user_factory(role="admin"))
+    user = asyncio.run(user_factory(role='admin'))
     books = [asyncio.run(book_factory()) for _ in range(3)]
-    token = create_access_token({"sub": str(user.id)})
+    token = create_access_token({'sub': str(user.id)})
     for book in books:
         client.post(
             '/api/v1/lendings/',
@@ -48,9 +46,9 @@ def test_lending_limit_endpoint(client, user_factory, book_factory):
 
 
 def test_return_lending_endpoint(client, user_factory, book_factory):
-    user = asyncio.run(user_factory(role="admin"))
+    user = asyncio.run(user_factory(role='admin'))
     book = asyncio.run(book_factory())
-    token = create_access_token({"sub": str(user.id)})
+    token = create_access_token({'sub': str(user.id)})
     resp = client.post(
         '/api/v1/lendings/',
         json={'user_id': user.id, 'book_id': book.id},
@@ -67,9 +65,9 @@ def test_return_lending_endpoint(client, user_factory, book_factory):
 
 
 def test_return_lending_with_fine_endpoint(client, user_factory, book_factory):
-    user = asyncio.run(user_factory(role="admin"))
+    user = asyncio.run(user_factory(role='admin'))
     book = asyncio.run(book_factory())
-    token = create_access_token({"sub": str(user.id)})
+    token = create_access_token({'sub': str(user.id)})
     resp = client.post(
         '/api/v1/lendings/',
         json={'user_id': user.id, 'book_id': book.id},

@@ -7,9 +7,9 @@ from app.core.exceptions import (
     LendingAlreadyExists,
     LendingLimitReached,
 )
-from app.repositories.book_repository import BookRepository
-from app.repositories.lending_repository import LendingRepository
-from app.services.lending_service import LendingService
+from app.repositories.book import BookRepository
+from app.repositories.lending import LendingRepository
+from app.services.lending import LendingService
 
 FINE_PER_DAY = 2
 FINE_DAYS_LATE = 6

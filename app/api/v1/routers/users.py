@@ -5,19 +5,35 @@ from typing import List
 from fastapi import APIRouter, status
 
 from app.api.deps.auth import AdminOnlyDep, AdminOrStaffDep, AnyRoleDep
+from app.api.deps.pagination import PaginationDep
 from app.api.deps.services import UserServiceDep
 from app.api.v1.schemas.lending import LendingRead
+from app.api.v1.schemas.paginated_response import PaginatedResponse
 from app.api.v1.schemas.user import UserCreate, UserRead
 from app.models.user import User
-from app.services.user_service import UserService
+from app.services.user import UserService
 
 router = APIRouter(prefix='/users', tags=['Users Routers'])
 
 
-@router.get('/', response_model=List[UserRead], dependencies=[AdminOnlyDep])
-async def list_users(service: UserService = UserServiceDep):
-    users = await service.list_users()
-    return users
+@router.get(
+    '/',
+    response_model=PaginatedResponse[UserRead],
+    dependencies=[AdminOnlyDep],
+)
+async def list_users(
+    pagination: PaginationDep,
+    service: UserService = UserServiceDep,
+):
+    users, total = await service.list_users(
+        limit=pagination.limit, offset=pagination.offset
+    )
+    return {
+        'items': users,
+        'total': total,
+        'page': (pagination.offset // pagination.limit) + 1,
+        'size': len(users),
+    }
 
 
 @router.post(

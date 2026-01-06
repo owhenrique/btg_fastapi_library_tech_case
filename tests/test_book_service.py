@@ -7,7 +7,7 @@ from app.core.exceptions import (
     InvalidBookData,
 )
 from app.models.book import BookCategoryEnum
-from app.services.book_service import BookService
+from app.services.book import BookService
 
 TOTAL_COPIES = 2
 

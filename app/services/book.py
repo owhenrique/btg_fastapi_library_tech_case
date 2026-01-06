@@ -11,7 +11,7 @@ from app.core.exceptions import (
     InvalidBookData,
 )
 from app.models.book import Book
-from app.repositories.book_repository import BookRepository
+from app.repositories.book import BookRepository
 
 
 class BookService:
@@ -21,8 +21,10 @@ class BookService:
         self.repo = repo
         self.session = session
 
-    async def list_books(self) -> Sequence[Book]:
-        return await self.repo.list_books()
+    async def list_books(
+        self, limit: int = 10, offset: int = 0
+    ) -> tuple[Sequence[Book], int]:
+        return await self.repo.list_books(limit=limit, offset=offset)
 
     async def create_book(self, data: BookCreate) -> Book:
         if not data.name or not data.category:
@@ -30,7 +32,7 @@ class BookService:
         if data.total_copies < 1:
             raise InvalidBookData(detail='Total copies must be at least 1')
 
-        books = await self.repo.list_books()
+        books, _ = await self.repo.list_books()
         for b in books:
             if b.name == data.name and b.author == data.author:
                 raise BookAlreadyExists()

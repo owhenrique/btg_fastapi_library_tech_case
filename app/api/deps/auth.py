@@ -8,7 +8,7 @@ from fastapi.security import OAuth2PasswordBearer
 from app.api.deps.services import UserServiceDep
 from app.core.security import decode_access_token
 from app.models.user import Role, User
-from app.services.user_service import UserService
+from app.services.user import UserService
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/auth/token')
 

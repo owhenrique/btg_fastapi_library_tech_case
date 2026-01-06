@@ -1,7 +1,7 @@
 import pytest
 
 from app.models.lending import Lending
-from app.repositories.lending_repository import LendingRepository
+from app.repositories.lending import LendingRepository
 
 USER_ID_1 = 1
 USER_ID_2 = 2

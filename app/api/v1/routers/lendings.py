@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from typing import List
-
 from fastapi import APIRouter, status
 
 from app.api.deps.auth import AdminOrStaffDep, AnyRoleDep
+from app.api.deps.pagination import PaginationDep
 from app.api.deps.services import LendingServiceDep
 from app.api.v1.schemas.lending import (
     LendingCreate,
@@ -12,6 +11,7 @@ from app.api.v1.schemas.lending import (
     LendingReturn,
     LendingReturnResult,
 )
+from app.api.v1.schemas.paginated_response import PaginatedResponse
 
 router = APIRouter(prefix='/lendings', tags=['Lendings Routers'])
 
@@ -41,17 +41,39 @@ async def return_lending(
 
 @router.get(
     '/active',
-    response_model=List[LendingRead],
+    response_model=PaginatedResponse[LendingRead],
     dependencies=[AdminOrStaffDep],
 )
-async def list_active_lendings(service=LendingServiceDep):
-    return await service.list_active_lendings()
+async def list_active_lendings(
+    pagination: PaginationDep, service=LendingServiceDep
+):
+    lendings, total = await service.list_active_lendings(
+        limit=pagination.limit, offset=pagination.offset
+    )
+    return {
+        'items': lendings,
+        'total': total,
+        'page': (pagination.offset // pagination.limit) + 1,
+        'size': len(lendings),
+    }
 
 
 @router.get(
     '/user/{user_id}',
-    response_model=List[LendingRead],
+    response_model=PaginatedResponse[LendingRead],
     dependencies=[AnyRoleDep],
 )
-async def user_lending_history(user_id: int, service=LendingServiceDep):
-    return await service.user_lending_history(user_id)
+async def user_lending_history(
+    user_id: int,
+    pagination: PaginationDep,
+    service=LendingServiceDep,
+):
+    lendings = await service.user_lending_history(
+        user_id, limit=pagination.limit, offset=pagination.offset
+    )
+
+    return {
+        'items': lendings,
+        'offset': pagination.offset,
+        'limit': pagination.limit,
+    }

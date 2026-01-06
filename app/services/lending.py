@@ -17,8 +17,8 @@ from app.core.exceptions import (
     LendingNotFound,
 )
 from app.models.lending import Lending
-from app.repositories.book_repository import BookRepository
-from app.repositories.lending_repository import LendingRepository
+from app.repositories.book import BookRepository
+from app.repositories.lending import LendingRepository
 
 LENDING_DAYS = 14
 FINE_PER_DAY = 2.0
@@ -89,8 +89,16 @@ class LendingService:
             lending_id=lending.id, returned_at=now, fine=fine
         )
 
-    async def list_active_lendings(self) -> Sequence[Lending]:
-        return await self.lending_repo.list_active_lendings()
+    async def list_active_lendings(
+        self, limit: int = 10, offset: int = 0
+    ) -> tuple[Sequence[Lending], int]:
+        return await self.lending_repo.list_active_lendings(
+            limit=limit, offset=offset
+        )
 
-    async def user_lending_history(self, user_id: int) -> Sequence[Lending]:
-        return await self.lending_repo.user_lending_history(user_id)
+    async def user_lending_history(
+        self, user_id: int, limit: int = 10, offset: int = 0
+    ) -> Sequence[Lending]:
+        return await self.lending_repo.user_lending_history(
+            user_id, limit=limit, offset=offset
+        )

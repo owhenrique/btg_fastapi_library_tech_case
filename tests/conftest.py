@@ -13,10 +13,10 @@ from app.db.database import create_db_and_tables
 from app.models.book import Book, BookCategoryEnum
 from app.models.lending import Lending
 from app.models.user import Role
-from app.repositories.book_repository import BookRepository
-from app.repositories.user_repository import UserRepository
-from app.services.book_service import BookService
-from app.services.user_service import UserService
+from app.repositories.book import BookRepository
+from app.repositories.user import UserRepository
+from app.services.book import BookService
+from app.services.user import UserService
 
 
 @pytest.fixture

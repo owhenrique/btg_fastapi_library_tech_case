@@ -7,7 +7,7 @@ from starlette.responses import Response
 from starlette.status import HTTP_429_TOO_MANY_REQUESTS
 
 RATE_LIMIT = 10
-RATE_PERIOD = 60 
+RATE_PERIOD = 60
 
 
 class RateLimiterMiddleware(BaseHTTPMiddleware):
@@ -24,7 +24,7 @@ class RateLimiterMiddleware(BaseHTTPMiddleware):
             q.popleft()
         if len(q) >= RATE_LIMIT:
             return Response(
-                "Rate limit exceeded. Max 10 requests per minute.",
+                'Rate limit exceeded. Max 10 requests per minute.',
                 status_code=HTTP_429_TOO_MANY_REQUESTS,
             )
         q.append(now)

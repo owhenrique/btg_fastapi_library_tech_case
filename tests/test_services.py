@@ -7,8 +7,8 @@ from app.core.exceptions import (
     IncorrectPassword,
     UserNotFound,
 )
-from app.repositories.user_repository import UserRepository
-from app.services.user_service import UserService
+from app.repositories.user import UserRepository
+from app.services.user import UserService
 
 
 def test_create_user_and_authenticate_success(

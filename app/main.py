@@ -1,4 +1,3 @@
-
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
@@ -27,10 +26,11 @@ async def lifespan(app: FastAPI):
 
 
 class LoggingMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request, call_next):
-        logger.info(f"REQUEST: {request.method} {request.url}")
+    @staticmethod
+    async def dispatch(request, call_next):
+        logger.info(f'REQUEST: {request.method} {request.url}')
         response = await call_next(request)
-        logger.info(f"RESPONSE: {response.status_code} {request.url}")
+        logger.info(f'RESPONSE: {response.status_code} {request.url}')
         return response
 
 
@@ -43,7 +43,7 @@ app.add_middleware(RateLimiterMiddleware)
 async def service_exception_handler(
     request: Request, exc: BaseServiceException
 ):
-    logger.error(f"ServiceException: {exc.detail}")
+    logger.error(f'ServiceException: {exc.detail}')
     return JSONResponse(status_code=exc.code, content={'detail': exc.detail})
 
 

@@ -13,7 +13,7 @@ from app.core.exceptions import (
 )
 from app.models.lending import Lending
 from app.models.user import Role, User
-from app.repositories.user_repository import UserRepository
+from app.repositories.user import UserRepository
 
 
 class UserService:
@@ -25,7 +25,7 @@ class UserService:
 
     async def list_users(
         self, limit: int = 100, offset: int = 0
-    ) -> Sequence[User]:
+    ) -> tuple[Sequence[User], int]:
         return await self.repo.list_users(limit=limit, offset=offset)
 
     async def create_user(

@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import (
 from app.db.database import create_db_and_tables
 from app.db.fixtures import create_dev_admin
 from app.models.user import Role
-from app.repositories.user_repository import UserRepository
+from app.repositories.user import UserRepository
 
 
 def test_create_dev_admin_creates_admin():

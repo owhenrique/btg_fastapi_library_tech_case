@@ -4,12 +4,12 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_session
-from app.repositories.book_repository import BookRepository
-from app.repositories.lending_repository import LendingRepository
-from app.repositories.user_repository import UserRepository
-from app.services.book_service import BookService
-from app.services.lending_service import LendingService
-from app.services.user_service import UserService
+from app.repositories.book import BookRepository
+from app.repositories.lending import LendingRepository
+from app.repositories.user import UserRepository
+from app.services.book import BookService
+from app.services.lending import LendingService
+from app.services.user import UserService
 
 
 async def get_lending_service(

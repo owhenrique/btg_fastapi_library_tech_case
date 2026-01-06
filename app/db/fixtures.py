@@ -10,8 +10,8 @@ from sqlalchemy.ext.asyncio import (
 
 from app.db.database import engine as default_engine
 from app.models.user import Role
-from app.repositories.user_repository import UserRepository
-from app.services.user_service import UserService
+from app.repositories.user import UserRepository
+from app.services.user import UserService
 
 
 async def create_dev_admin(
