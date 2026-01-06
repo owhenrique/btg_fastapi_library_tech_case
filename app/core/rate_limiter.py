@@ -1,4 +1,5 @@
 import time
+import logging
 from collections import defaultdict, deque
 
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -16,16 +17,22 @@ class RateLimiterMiddleware(BaseHTTPMiddleware):
         self.requests = defaultdict(deque)
 
     async def dispatch(self, request: Request, call_next):
-        client_ip = request.client.host
+        client_ip = request.client.host if request.client else "unknown"
         now = time.time()
         q = self.requests[client_ip]
 
         while q and now - q[0] > RATE_PERIOD:
             q.popleft()
         if len(q) >= RATE_LIMIT:
+            logging.warning(f"Rate limit exceeded for IP {client_ip}")
             return Response(
                 'Rate limit exceeded. Max 10 requests per minute.',
                 status_code=HTTP_429_TOO_MANY_REQUESTS,
             )
         q.append(now)
-        return await call_next(request)
+        try:
+            response = await call_next(request)
+        except Exception as exc:
+            logging.error(f"Error processing request from {client_ip}: {exc}")
+            raise
+        return response
